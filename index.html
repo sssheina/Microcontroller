@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DG Test</title>
+    <style>
+      html {
+        font-family: Montserrat;
+        font-size: 14px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .header-indicator-first,
+      .header-indicator-two {
+        display: flex;
+        flex-direction: row;
+      }
+      .header_dryContact,
+      .header_socket {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        width: 180px;
+        height: 55px;
+        background-color: #d1d1d1;
+        border: 1px solid white;
+      }
+      .header_sensor,
+      .header_hydro,
+      .header_dimmer,
+      .voltage {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        width: 120px;
+        height: 55px;
+        background-color: #d1d1d1;
+        border: 1px solid white;
+      }
+      .indicator {
+        width: 13px;
+        height: 13px;
+        background-color: #b2b1b1;
+        border-radius: 7px;
+        margin-left: 10px;
+      }
+      .selected {
+        background-color: #31e297;
+      }
+
+      .voltage-selected {
+        background-color: #FF7B7B;
+      }
+
+      .wrapper_dimmer, .wrapper_dryContact, .wrapper_hydro {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 360px;
+        height: 155px;
+      }
+      .wrapper_dryContact {
+        /* display: none; */
+      }
+      .wrapper_hydro {
+        /* display: none; */
+      }
+      .dryContact_row1, .dryContact_row2, .hydro_row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly
+      }
+      .dryContact_relay0 ,.dryContact_relay1,.dryContact_relay2,.dryContact_relay3,
+      .hydro_pump0, .hydro_pump1 {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+      }  
+      .dryContact_name {
+        align-self: center;
+      }
+      .cannel {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
+      .cannelName {
+        align-self: center;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #b2b1b1;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #31e297;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #31e297;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+      .range {
+        border-color: #31e297;
+        -webkit-appearance: none;
+        width: 95px;
+        height: 10px;
+        background-color: #b2b1b1;
+        outline: none;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        margin: 12px 0px 5px 0px;
+        cursor: pointer;
+        border-radius: 5px;
+
+      }
+
+      .range:hover {
+    opacity: 1;
+}
+.range::-webkit-slider-thumb {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    background: #31e297;
+}
+
+.wrapper_dryContact, .wrapper_hydro {
+  background-color:#d1d1d1;
+  border: 1px solid white;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-indicator-first">
+        <div class="header_dryContact">
+          <div class="header_dryContact-indicator indicator"></div>
+          DRY CONTACT
+        </div>
+        <div class="header_socket">
+          <div class="header_socket-indicator indicator"></div>
+          SOCKET
+        </div>
+      </div>
+      <div class="header-indicator-two">
+        <div class="header_sensor">
+          <div class="header_sensor-indicator indicator"></div>
+          SENSOR
+        </div>
+        <div class="header_hydro">
+          <div class="header_hydro-indicator indicator"></div>
+          HYDRO
+        </div>
+        <div class="header_dimmer">
+          <div class="header_dimmer-indicator indicator selected"></div>
+          DIMMER
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- БЛОК dimmer_________________________________ -->
+
+      <div class="wrapper_dimmer">
+        <div class="dimmer_cannel-0 cannel">
+
+          <label id="switcher-cannel-0" class="switch">
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+
+          <input type="range" class="range" min="0" max="255" value="0" name="range0"/>
+          <label for="range0" class="cannelName">CANNEL 0</label>
+        </div>
+
+        <div class="dimmer_cannel-1 cannel">
+
+          <label id="switcher-cannel-1" class="switch" >
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+
+          <input type="range" class="range" min="0" max="255" value="0" name="range1"/>
+          <label for="range1" class="cannelName">CANNEL 1</label>
+        </div>
+      </div>
+
+      <!-- БЛОК dryContact_____________________________________ -->
+
+      <div class="wrapper_dryContact">
+
+        <div class="dryContact_row1">
+          <div class="dryContact_relay0 ">
+            <label id="switcher-relay0" class="switch">
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <div class="dryContact_name">
+            RELAY 0
+          </div>
+        </div>
+
+          <div class="dryContact_relay1 ">
+            <label id="switcher-relay1" class="switch">
+              <input type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+            <div class="dryContact_name">
+              RELAY 1
+            </div>
+          </div>
+        </div>
+          
+      <div class="dryContact_row2">
+        <div class="dryContact_relay2 ">
+          <label id="switcher-relay2" class="switch">
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <div class="dryContact_name">
+            RELAY 2
+          </div>
+        </div>
+
+        <div class="dryContact_relay3 ">
+          <label id="switcher-relay3" class="switch">
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <div class="dryContact_name">
+            RELAY 3
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- БЛОК hydro______________________________________________ -->
+
+      <div class="wrapper_hydro">
+
+        <div class="hydro_row">
+          <div class="hydro_pump0">
+            <label id="switcher-pump0" class="switch">
+              <input type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+            <div class="dryContact_name">
+              PUMP 0
+            </div>
+          </div>
+  
+          <div class="hydro_pump1">
+            <label id="switcher-pump1" class="switch">
+              <input type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+            <div class="dryContact_name">
+              PUMP 1
+            </div>
+          </div>
+      </div>
+    </main>
+
+    <!-- ФУТЕР______________________________________________________ -->
+
+    <footer>
+      <div class="voltage-5.5 voltage"><div class="header_hydro-indicator indicator voltage-selected"></div>
+      5.5 V</div>
+      <div class="voltage-5.0 voltage"><div class="header_hydro-indicator indicator"></div>
+      5.0 V</div>
+      <div class="voltage-3.3 voltage"><div class="header_hydro-indicator indicator"></div>
+      3.3 V</div>
+    </footer>
+  </body>
+</html>
